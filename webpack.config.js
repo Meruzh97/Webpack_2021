@@ -5,6 +5,7 @@ const isProd = !isDev; //если не dev, тогда profuction
 const filename = (ext) => isDev ? `[name].${ext}` : `[name].[contenthash].${ext}` //будет определять название файла, если isDev, то обычное название файла (name), а если нет, то название файла + contenthash. Хэш нужен для того, чтобы при сборке приложения каждый раз выдавались новые названия файлов и нам не пришлось сбрасывать кэн на сайте.
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 
 
@@ -18,6 +19,11 @@ module.exports = {
         path: path.resolve(__dirname, 'dist') //конечная точка в dist
     },
     plugins: [
+        new CopyWebpackPlugin({
+            patterns: [
+              { from: path.resolve(__dirname, 'src/assets') , to: path.resolve(__dirname, 'dist/assets') },
+            ],
+          }),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'src/index.html'),
             filename: 'index.html',
